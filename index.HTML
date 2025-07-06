@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Cumple Homestuck</title>
+<style>
+  html, body {
+    margin: 0; padding: 0;
+    height: 100%;
+    background: black;
+    overflow: hidden;
+    font-family: sans-serif;
+    color: white;
+  }
+  #loading-screen {
+    position: fixed; top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    background: black;
+    z-index: 9999;
+    opacity: 1;
+    transition: opacity 2s ease;
+  }
+  #bg-video, #explosion-video {
+    position: fixed; top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 1s ease;
+  }
+  #bg-video.visible {
+    opacity: 1;
+    z-index: 1;
+  }
+  #explosion-video.visible {
+    opacity: 1;
+    z-index: 999;
+  }
+  #cake-container {
+    position: fixed; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 20;
+    display: flex; flex-direction: column; align-items: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 2s ease;
+    cursor: pointer;
+  }
+  #cake-container.visible {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  #cake-container img {
+    max-width: 300px;
+    width: 80vw;
+  }
+  #cake-container p {
+    color: white;
+    font-size: 1.3rem;
+    margin-top: 10px;
+    text-align: center;
+    text-shadow: 0 0 5px black;
+  }
+  #final-bg {
+    position: fixed; top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    background-image: url('https://i.pinimg.com/736x/7e/a9/cf/7ea9cf34eb7e95747191e56ac6bb46b7.jpg');
+    background-size: cover;
+    background-position: center;
+    opacity: 0;
+    z-index: 5;
+    transition: opacity 2s ease;
+    padding: 20px;
+    box-sizing: border-box;
+    overflow-y: auto; /* Para que todo final sea deslizable en caso necesario */
+  }
+  #final-bg.visible {
+    opacity: 1;
+  }
+  #star-rain {
+    position: fixed;
+    top: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 90vw;
+    height: 90vh;
+    background: url('https://img1.picmix.com/output/stamp/normal/0/7/0/4/2664070_d2cfc.gif') no-repeat center center;
+    background-size: contain;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 4;
+    transition: opacity 2s ease;
+  }
+  #star-rain.visible {
+    opacity: 1;
+  }
+  #greeting, #separator, #message-container {
+    opacity: 0;
+    transition: opacity 2s ease;
+    position: relative;
+    z-index: 20;
+    color: white;
+  }
+  #greeting.visible,
+  #separator.visible,
+  #message-container.visible {
+    opacity: 1;
+  }
+  #greeting {
+    text-align: center;
+    margin-top: 30px;
+  }
+  #greeting h1 {
+    font-size: 1.4rem; /* mediano */
+    margin: 0;
+    text-shadow: 2px 2px 5px black;
+  }
+  #greeting h2 img {
+    max-width: 60vw;
+    height: auto;
+  }
+  #separator {
+    width: 80px; /* más chiquito */
+    margin: 20px auto;
+    display: block;
+  }
+  #message-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    max-width: 900px;
+    margin: 0 auto 40px;
+    gap: 30px;
+    flex-wrap: wrap;
+  }
+  #text-left {
+    flex: 1 1 45%;
+    white-space: pre-line;
+    font-size: 1rem;
+    line-height: 1.5;
+    /* Eliminamos scroll */
+    max-height: none !important;
+    overflow: visible !important;
+    text-shadow:
+      1px 1px 2px black,
+      0 0 5px black,
+      0 0 10px black;
+  }
+  #gif-right {
+    flex: 1 1 45%;
+    display: flex;
+    justify-content: center;
+  }
+  #gif-right img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+  }
+  @media screen and (max-width: 768px) {
+    #message-container {
+      flex-direction: column;
+      align-items: center;
+    }
+    #text-left, #gif-right {
+      flex: 1 1 100%;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div id="loading-screen"></div>
+
+<video id="bg-video" autoplay muted playsinline>
+  <source src="https://files.catbox.moe/pi77gv.mp4" type="video/mp4" />
+</video>
+
+<div id="cake-container">
+  <img src="https://img1.picmix.com/output/stamp/normal/4/0/8/2/2132804_12b74.gif" alt="Pastel" />
+  <p>Sopla las velas :p<br>(haz click sobre el pastel)</p>
+</div>
+
+<video id="explosion-video" playsinline>
+  <source src="https://files.catbox.moe/l3atd5.mp4" type="video/mp4" />
+</video>
+
+<div id="final-bg">
+  <div id="greeting">
+    <h1>Feliz cumpleaños :D</h1>
+    <h2>
+      <img src="https://see.fontimg.com/api/rf5/Jngm/Zjc2MzdhOWRiZWI5NGZjMzg3NDZhNzA0NWNiYzlmYzcudHRm/SU5YU0E/phat-guy.png?r=fs&h=98&w=1500&fg=000000&bg=FFFFFF&tb=1&s=65" alt="INXSA" />
+    </h2>
+  </div>
+  <img id="separator" src="https://img1.picmix.com/output/stamp/normal/4/4/6/0/2740644_09ce1.gif" alt="Separador" />
+  <div id="message-container">
+    <div id="text-left">
+      Antes que nada, quiero pedirte mil disculpas si estos días he estado un poquito seca o distante. La verdad es que he estado muy ocupada trabajando en esto que te estoy preparando y todavía me faltan un montón de dibujos que te prometí.
+
+      Sentí que merecías algo más especial que un simple “feliz cumpleaños”, así que me puse a hacer esto con mucho cariño. Espero de corazón que te guste.
+
+      Sé que la manera en la que empezamos a hablar no fue nada común (¡perdón por eso, XDn't!), pero en estos casi dos meses he tenido la suerte de conocer a alguien increíble como tú. Me encanta pasar horas hablando de personajes random, compartiendo headcanons y todas esas cosas locas y autistas que nos hacen felices.
+
+      Quiero agradecerte muchísimo por todo el apoyo que me das, y aunque a veces pueda ser un poco insistente, quiero que sepas que te quiero mucho y que puedes contar conmigo para lo que sea, siempre.
+
+      ¡Te quiero mucho, Inxsa! 💖
+    </div>
+    <div id="gif-right">
+      <img src="https://img1.picmix.com/output/pic/normal/1/6/7/1/12401761_db0a0.gif" alt="Gif de Inxsa" />
+    </div>
+  </div>
+</div>
+
+<div id="star-rain"></div>
+
+<audio id="cheer-sfx" src="https://files.catbox.moe/fp6i4p.mp3"></audio>
+<audio id="special-song" src="https://files.catbox.moe/tkwpkr.mp3"></audio>
+
+<script>
+  const loadingScreen = document.getElementById('loading-screen');
+  const video = document.getElementById('bg-video');
+  const explosion = document.getElementById('explosion-video');
+  const cake = document.getElementById('cake-container');
+  const finalBg = document.getElementById('final-bg');
+  const starRain = document.getElementById('star-rain');
+  const cheer = document.getElementById('cheer-sfx');
+  const specialSong = document.getElementById('special-song');
+  const greeting = document.getElementById('greeting');
+  const separator = document.getElementById('separator');
+  const message = document.getElementById('message-container');
+
+  // Inicia video tras pantalla negra
+  setTimeout(() => {
+    loadingScreen.style.opacity = 0;
+    video.classList.add('visible');
+    setTimeout(() => {
+      loadingScreen.style.display = 'none';
+    }, 2000);
+  }, 3000);
+
+  // Al terminar video de fondo
+  video.addEventListener('ended', () => {
+    loadingScreen.style.display = 'block';
+    loadingScreen.style.opacity = 1;
+    video.classList.remove('visible');
+
+    setTimeout(() => {
+      loadingScreen.style.display = 'none';
+      cake.classList.add('visible');
+    }, 3000);
+  });
+
+  // Click en pastel - inicia explosión y audio FNAF
+  cake.addEventListener('click', () => {
+    cake.style.opacity = 0;
+    cake.style.pointerEvents = 'none';
+    setTimeout(() => {
+      cake.style.display = 'none';
+      explosion.classList.add('visible');
+      explosion.currentTime = 0;
+      explosion.play();
+      cheer.currentTime = 0;
+      cheer.play();
+    }, 500);
+  });
+
+  // Al acabar explosión
+  explosion.addEventListener('ended', () => {
+    explosion.classList.remove('visible');
+    setTimeout(() => {
+      finalBg.classList.add('visible');
+      greeting.classList.add('visible');
+      separator.classList.add('visible');
+      message.classList.add('visible');
+      starRain.classList.add('visible');
+    }, 1000);
+  });
+
+  // Cuando el audio FNAF termina, empieza la canción especial
+  cheer.addEventListener('ended', () => {
+    specialSong.currentTime = 0;
+    specialSong.play();
+  });
+</script>
+
+</body>
+</html>
